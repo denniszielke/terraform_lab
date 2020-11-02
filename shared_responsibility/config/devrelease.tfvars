@@ -3,6 +3,6 @@ aks_subnet_id = "/subscriptions//resourceGroups/shared/providers/Microsoft.Netwo
 workspace_id = "/subscriptions//resourcegroups/shared/providers/microsoft.operationalinsights/workspaces/shared-laspace"
 infravault_id = "/subscriptions//resourceGroups/shared/providers/Microsoft.KeyVault/vaults/shared-infravault"
 aks_node_count = 1
-kubernetes_version = "1.15.12"
+kubernetes_version = "1.17.13"
 aks_sku = "Paid"
 admin_object_id = ""

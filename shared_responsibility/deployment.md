@@ -1,11 +1,12 @@
-# Shared Environment
+# Environment with shared responsibility
 
+## Shared resources:
 Initial deployment:
 - VNET
 - Log Analytics
 - KeyVaultInfra
 
-# Environment:
+## Dedicated team environment:
 - AKS Identity
 - KeyVaultEncryptionKey in KeyVaultInfra
 - DiskEncryptionSet 

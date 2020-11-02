@@ -1,0 +1,4 @@
+
+**/*.plan
+**/.terraform
+**/tst.tfvars

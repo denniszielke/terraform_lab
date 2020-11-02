@@ -1,7 +1,6 @@
 export deployment_name="$1"
-export terra_path="$2"
-export location="$3"
-export subscriptionid="$4"
+export location="$2"
+export subscriptionid="$3"
 
 if [ "$location" == "" ]; then
 location="westeurope"
@@ -44,10 +43,12 @@ fi
 
 echo "initialzing terraform state storage..."
 
-$terra_path init -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="resource_group_name=$TERRAFORM_STATE_RESOURCE_GROUP_NAME"  -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" ./environment
+terraform init -backend=true -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="resource_group_name=$TERRAFORM_STATE_RESOURCE_GROUP_NAME"  -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" ./shared
+
+#$terra_path import azurerm_subnet.env2-subnet /subscriptions/5abd8123-18f8-427f-a4ae-30bfb82617e5/resourceGroups/magentashared/providers/Microsoft.Network/virtualNetworks/magentashared-vnet/subnets/env2-subnet 
 
 echo "planning terraform..."
-$terra_path plan -out $deployment_name-out.plan -var-file "config/$deployment_name.tfvars"  -var="deployment_name=$deployment_name" -var="location=$location" -var="tenant_id=$tenantid" -var="subscription_id=$subscriptionid"  ./environment
+terraform plan -out $deployment_name-out.plan -var-file "config/shared.tfvars"  -var="location=$location" -var="tenant_id=$tenantid" -var="subscription_id=$subscriptionid"  ./shared
 
 # echo "running terraform apply..."
-$terra_path apply $deployment_name-out.plan
+terraform apply $deployment_name-out.plan
