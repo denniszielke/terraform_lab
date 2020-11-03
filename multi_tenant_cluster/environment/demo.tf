@@ -1,9 +1,17 @@
 
+resource "kubernetes_namespace" "demo-ns" {
+  metadata {
+    name = "demo"
+  }
+
+  depends_on = [azurerm_kubernetes_cluster.aks]
+}
+
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment
 resource "kubernetes_deployment" "demo-app" {
   metadata {
     name = "demo-app"
-    namespace = "demo"
+    namespace = kubernetes_namespace.demo-ns.name
     labels = {
       app = "dummy-logger"
     }
@@ -54,13 +62,15 @@ resource "kubernetes_deployment" "demo-app" {
       }
     }
   }
+
+  depends_on = [kubernetes_namespace.demo-ns]
 }
 
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service
 resource "kubernetes_service" "demo-svc" {
   metadata {
     name = "dummy-svc"
-    namespace = "demo"
+    namespace = kubernetes_namespace.demo-ns.name
   }
   spec {
     selector = {
@@ -74,13 +84,15 @@ resource "kubernetes_service" "demo-svc" {
 
     type = "ClusterIP"
   }
+  
+  depends_on = [kubernetes_namespace.demo-ns]
 }
 
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/ingress
 resource "kubernetes_ingress" "appgw-ingress" {
   metadata {
     name = "appgw-ingress"
-    namespace = "demo"
+    namespace = kubernetes_namespace.demo-ns.name
     annotations = {
       "kubernetes.io/ingress.class" = "azure/application-gateway"
     }
@@ -98,6 +110,8 @@ resource "kubernetes_ingress" "appgw-ingress" {
       }
     }
   }
+
+  depends_on = [kubernetes_namespace.demo-ns]
 }
 
 
@@ -105,7 +119,7 @@ resource "kubernetes_ingress" "appgw-ingress" {
 resource "kubernetes_ingress" "traefik-ingress" {
   metadata {
     name = "traefik-ingress"
-    namespace = "demo"
+    namespace = kubernetes_namespace.demo-ns.name
     annotations = {
       "kubernetes.io/ingress.class" = "traefik"
     }
@@ -114,6 +128,7 @@ resource "kubernetes_ingress" "traefik-ingress" {
   spec {
 
     rule {
+      host = "${azurerm_public_ip.traefik_ingress.ip_address}.xip.io"
       http {
         path {
           backend {
@@ -124,4 +139,14 @@ resource "kubernetes_ingress" "traefik-ingress" {
       }
     }
   }
+
+  depends_on = [kubernetes_namespace.demo-ns]
+}
+
+output "TRAEFIK_INGRESS" {
+  value = "http://${azurerm_public_ip.traefik_ingress.ip_address}.xip.io/ping"
+}
+
+output "APPGW_INGRESS" {
+  value = "http://${azurerm_public_ip.pip_appgw.ip_address}.xip.io/ping"
 }

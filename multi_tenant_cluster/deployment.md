@@ -15,7 +15,8 @@ Deployment can be triggered with the `deploy.sh` script
 Attention: You need to specify an aad group aks_admin_object_id in the `env_config' file and the deployment user needs to be a member of this group - otherwise the helm deployment will fail
 
 ```
-DEPLOYMENT_NAME="depl234" # name of the deployment lower case unique name
+chmod +x ./deploy.sh 
+DEPLOYMENT_NAME="depl124" # name of the deployment lower case unique name
 ENV_CONFIG="dev" # environment config - alternative provide absolut or relative path to config file ./config/dev.tfvars
 LOCATION="northeurope" # datacenter location - default is northeurope
 SUBSCRIPTION_ID=$(az account show --query id -o tsv) # your subscription id
@@ -24,3 +25,12 @@ SUBSCRIPTION_ID=$(az account show --query id -o tsv) # your subscription id
 ```
 
 Naming conventions for all resources are maintained in main.tf
+
+
+## Connect to your cluster
+
+```
+KUBE_GROUP=
+KUBE_NAME=
+az aks get-credentials -g $KUBE_GROUP -n $KUBE_NAME
+```

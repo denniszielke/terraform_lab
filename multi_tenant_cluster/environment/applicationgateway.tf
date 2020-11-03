@@ -72,3 +72,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   depends_on = [azurerm_virtual_network.vnet, azurerm_subnet.subnet_appgw ,azurerm_public_ip.pip_appgw]
 }
+
+output "APPGW_PUBLIC_IP" {
+  value = azurerm_public_ip.pip_appgw.ip_address
+}

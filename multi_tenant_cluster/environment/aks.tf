@@ -68,7 +68,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
 
     azure_policy {
-      enabled = true
+      enabled = false #true
     }
   }
 
@@ -76,3 +76,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags       = var.tags
 }
 
+output "KUBE_NAME" {
+    value = azurerm_kubernetes_cluster.aks.name
+}
+
+output "KUBE_GROUP" {
+    value = azurerm_resource_group.rg.name
+}
+
+output "NODE_GROUP" {
+  value = azurerm_kubernetes_cluster.aks.node_resource_group
+}

@@ -14,3 +14,7 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled            = false
   tags                     = var.tags
 }
+
+output "CONTAINER_REGISTRY_URL" {
+  value = azurerm_container_registry.acr.login_server
+}

@@ -17,14 +17,6 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "demo-ns" {
-  metadata {
-    name = "demo"
-  }
-
-  depends_on = [azurerm_kubernetes_cluster.aks]
-}
-
 resource "null_resource" "delay_charts" {
   provisioner "local-exec" {
     command = "sleep 30"

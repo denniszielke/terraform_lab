@@ -90,46 +90,46 @@ TERRAFORM_DEPLOYMENT_NAME="$deploymentname$configname"
 TERRAFORM_STORAGE_NAME="t$deploymentname$configname$location"
 TERRAFORM_STATE_RESOURCE_GROUP_NAME="state$deploymentname$configname$location"
 
-echo "TERRAFORM_DEPLOYMENT_NAME=$deploymentname$configname"
-echo "TERRAFORM_STORAGE_NAME=t$deploymentname$configname$location"
-echo "TERRAFORM_STATE_RESOURCE_GROUP_NAME=state$deploymentname$configname$location"
+echo -e "TERRAFORM_DEPLOYMENT_NAME=$deploymentname$configname"
+echo -e "TERRAFORM_STORAGE_NAME=$deploymentname$configname$location"
+echo -e "TERRAFORM_STATE_RESOURCE_GROUP_NAME=state$deploymentname$configname$location"
 
-echo "creating terraform state storage..."
+echo "Creating terraform state storage..."
 TFGROUPEXISTS=$(az group show --name $TERRAFORM_STATE_RESOURCE_GROUP_NAME --query name -o tsv --only-show-errors)
 if [ "$TFGROUPEXISTS" == $TERRAFORM_STATE_RESOURCE_GROUP_NAME ]; then 
-echo "terraform storage resource group $TERRAFORM_STATE_RESOURCE_GROUP_NAME exists"
+echo "Terraform storage resource group $TERRAFORM_STATE_RESOURCE_GROUP_NAME exists"
 else
-echo "creating terraform storage resource group $TERRAFORM_STATE_RESOURCE_GROUP_NAME..."
+echo "Creating terraform storage resource group $TERRAFORM_STATE_RESOURCE_GROUP_NAME..."
 az group create -n $TERRAFORM_STATE_RESOURCE_GROUP_NAME -l $location --output none
 fi
 
 TFSTORAGEEXISTS=$(az storage account show -g $TERRAFORM_STATE_RESOURCE_GROUP_NAME -n $TERRAFORM_STORAGE_NAME --query name -o tsv)
 if [ "$TFSTORAGEEXISTS" == $TERRAFORM_STORAGE_NAME ]; then 
-echo "terraform storage account $TERRAFORM_STORAGE_NAME exists"
+echo "Terraform storage account $TERRAFORM_STORAGE_NAME exists"
 TERRAFORM_STORAGE_KEY=$(az storage account keys list --account-name $TERRAFORM_STORAGE_NAME --resource-group $TERRAFORM_STATE_RESOURCE_GROUP_NAME --query "[0].value" -o tsv)
 else
-echo "creating terraform storage account $TERRAFORM_STORAGE_NAME..."
+echo "Creating terraform storage account $TERRAFORM_STORAGE_NAME..."
 az storage account create --resource-group $TERRAFORM_STATE_RESOURCE_GROUP_NAME --name $TERRAFORM_STORAGE_NAME --location $location --sku Standard_LRS --output none
 TERRAFORM_STORAGE_KEY=$(az storage account keys list --account-name $TERRAFORM_STORAGE_NAME --resource-group $TERRAFORM_STATE_RESOURCE_GROUP_NAME --query "[0].value" -o tsv)
 az storage container create -n tfstate --account-name $TERRAFORM_STORAGE_NAME --account-key $TERRAFORM_STORAGE_KEY --output none
 fi
 
 if [ "$kubernetes_version" == "" ]; then
-echo "getting latest aks supporte version"
+echo "Getting latest aks supporte version..."
 KUBERNETES_VERSION=$(az aks get-versions -l $location --query 'orchestrators[?default == `true`].orchestratorVersion' -o tsv)
-echo "found AKS version $KUBERNETES_VERSION"
+echo "Found AKS version $KUBERNETES_VERSION"
 fi
 
-echo "initialzing terraform state storage..."
+echo "Initialzing terraform state storage..."
 
 terraform init -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" ./environment
 
-echo "planning terraform..."
+echo "Planning terraform..."
 terraform plan -out $TERRAFORM_DEPLOYMENT_NAME-out.plan -var-file "config/$configname.tfvars"  -var="resource_group_name=$deploymentname" -var="deployment_name=$deploymentname" -var="location=$location" -var="subscription_id=$subscriptionid" ./environment
 
 if [ -f $TERRAFORM_DEPLOYMENT_NAME-out.plan ]; then
-   echo "running terraform apply..."
+   echo "Running terraform apply..."
    terraform apply $TERRAFORM_DEPLOYMENT_NAME-out.plan
 else
-   echo "skipping terraform apply due to error"
+   echo "Skipping terraform apply due to error"
 fi

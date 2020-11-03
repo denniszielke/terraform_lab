@@ -38,3 +38,7 @@ resource "helm_release" "traefik_ingress" {
   
   depends_on = [azurerm_kubernetes_cluster.aks, azurerm_public_ip.traefik_ingress, null_resource.after_charts]
 }
+
+output "TRAEFIK_PUBLIC_IP" {
+  value = azurerm_public_ip.traefik_ingress.ip_address
+}
