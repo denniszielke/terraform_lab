@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "demo-ns" {
 resource "kubernetes_deployment" "demo-app" {
   metadata {
     name = "demo-app"
-    namespace = kubernetes_namespace.demo-ns.name
+    namespace = "demo"
     labels = {
       app = "dummy-logger"
     }
@@ -70,7 +70,7 @@ resource "kubernetes_deployment" "demo-app" {
 resource "kubernetes_service" "demo-svc" {
   metadata {
     name = "dummy-svc"
-    namespace = kubernetes_namespace.demo-ns.name
+    namespace = "demo"
   }
   spec {
     selector = {
@@ -92,7 +92,7 @@ resource "kubernetes_service" "demo-svc" {
 resource "kubernetes_ingress" "appgw-ingress" {
   metadata {
     name = "appgw-ingress"
-    namespace = kubernetes_namespace.demo-ns.name
+    namespace = "demo"
     annotations = {
       "kubernetes.io/ingress.class" = "azure/application-gateway"
     }
