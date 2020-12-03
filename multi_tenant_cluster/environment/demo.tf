@@ -119,7 +119,7 @@ resource "kubernetes_ingress" "appgw-ingress" {
 resource "kubernetes_ingress" "traefik-ingress" {
   metadata {
     name = "traefik-ingress"
-    namespace = kubernetes_namespace.demo-ns.name
+    namespace = "demo"
     annotations = {
       "kubernetes.io/ingress.class" = "traefik"
     }
