@@ -65,7 +65,7 @@ variable "vm_size" {
 
 # kubernetes version
 variable "kubernetes_version" {
-    default = "1.15.12" #"1.17.9" # 1.17 required for disk encryption
+    default = "1.18.14" #"1.17.9" # 1.17 required for disk encryption
 }
 
 variable "location" {

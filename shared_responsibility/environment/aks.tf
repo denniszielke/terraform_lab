@@ -46,15 +46,9 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    user_assigned_identity_id = var.controller_id
   }
-
-  # service_principal {
-  #   client_id     = azuread_application.aks_app.application_id
-  #   client_secret = random_string.aks_sp_password.result
-  #   # client_id     = var.aks_client_id
-  #   # client_secret = var.aks_client_secret
-  # }
 
   addon_profile {
     oms_agent {

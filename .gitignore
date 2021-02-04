@@ -2,3 +2,4 @@
 **/*.plan
 **/.terraform
 **/tst.tfvars
+**/*.hcl

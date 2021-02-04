@@ -44,12 +44,21 @@ variable "aks_sku" {
 }
 
 variable "aks_kubernetes_version" {
-    default = "1.17.13"
+    default = "1.18.14"
 }
 
 variable "aks_admin_object_id" {
+    default = ""
+}
 
-    default = "aks_admin_object_id"
+variable "gw_subnet_id" {
+
+    default = "gwsubnetid"
+}
+
+variable "aks_subnet_id" {
+
+    default = "aks_subnet_id"
 }
 
 variable "aks_configuration" {

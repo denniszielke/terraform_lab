@@ -2,7 +2,7 @@
 resource "azurerm_kubernetes_cluster" "aks" {
   lifecycle {
     ignore_changes = [
-      default_node_pool[0].node_count
+      default_node_pool[0].node_count, role_based_access_control
     ]
   }
 
@@ -29,13 +29,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
     max_count           = var.aks_configuration["nodepool_1_max"]
     node_count          = var.aks_configuration["nodepool_1_size"]
     os_disk_size_gb     = var.aks_configuration["nodepool_1_disk"]
-    vnet_subnet_id      = azurerm_subnet.subnet_aks.id
+    vnet_subnet_id      = var.aks_subnet_id
     type                = "VirtualMachineScaleSets"
     #availability_zones = var.aks_zones
   }
 
+  disk_encryption_set_id = azurerm_disk_encryption_set.des.id
+
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    user_assigned_identity_id = azurerm_user_assigned_identity.controller_id.id
   }
 
   role_based_access_control {
@@ -72,7 +75,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  depends_on = [azurerm_virtual_network.vnet]
+  # depends_on = [azurerm_virtual_network.vnet]
   tags       = var.tags
 }
 

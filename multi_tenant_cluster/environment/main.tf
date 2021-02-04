@@ -3,6 +3,7 @@ provider "azurerm" {
     # client_id       = var.terraform_client_id
     # client_secret   = var.terraform_client_secret
     tenant_id       = var.tenant_id
+    #version = "=2.44.0"
     features {}
 }
 
@@ -17,11 +18,6 @@ terraform {
 
 # # Locals block for hardcoded names. 
 locals {
-    vnet_name                      = "${var.deployment_name}-vnet"
-    subnet_appgw_name              = "1-appgw-subnet"
-    subnet_aks_name                = "2-aks-subnet"
-    subnet_bastion_name            = "3-bastion-subnet"
-    
     aks_name                       = "${var.deployment_name}-aks"
     aks_nodepool_1_name            = "agentpool"
     aks_node_rg_name               = "${var.deployment_name}_nodes_${var.location}"
@@ -32,7 +28,6 @@ locals {
 
     app_gateway_pip_name           = "${var.deployment_name}-appgw-pip"
     app_gateway_name               = "${var.deployment_name}-appgw"
-    traefik_dns_name               = var.deployment_name
 
     backend_address_pool_name      = "${var.deployment_name}-beap"
     frontend_port_name             = "${var.deployment_name}-feport"

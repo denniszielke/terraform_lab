@@ -23,7 +23,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   gateway_ip_configuration {
     name      = "appGatewayIpConfig"
-    subnet_id = azurerm_subnet.subnet_appgw.id
+    subnet_id = var.gw_subnet_id
   }
 
   frontend_port {
@@ -70,7 +70,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   tags = var.tags
 
-  depends_on = [azurerm_virtual_network.vnet, azurerm_subnet.subnet_appgw ,azurerm_public_ip.pip_appgw]
+  depends_on = [azurerm_public_ip.pip_appgw]
 }
 
 output "APPGW_PUBLIC_IP" {
