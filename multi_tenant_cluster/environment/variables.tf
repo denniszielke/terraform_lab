@@ -56,6 +56,11 @@ variable "gw_subnet_id" {
     default = "gwsubnetid"
 }
 
+variable "current_user_object_id" {
+
+    default = "current_user_object_id"
+}
+
 variable "aks_subnet_id" {
 
     default = "aks_subnet_id"
