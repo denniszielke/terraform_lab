@@ -46,8 +46,8 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 
   identity {
-    type = "UserAssigned"
-    user_assigned_identity_id = var.controller_id
+    type = "SystemAssigned"
+    # user_assigned_identity_id = var.controller_id
   }
 
   addon_profile {

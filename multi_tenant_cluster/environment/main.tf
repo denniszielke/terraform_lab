@@ -3,7 +3,7 @@ provider "azurerm" {
     # client_id       = var.terraform_client_id
     # client_secret   = var.terraform_client_secret
     tenant_id       = var.tenant_id
-    #version = "=2.44.0"
+    version = "=2.43.0"
     features {}
 }
 

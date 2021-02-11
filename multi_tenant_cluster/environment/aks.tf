@@ -37,8 +37,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   disk_encryption_set_id = azurerm_disk_encryption_set.des.id
 
   identity {
-    type = "UserAssigned"
-    user_assigned_identity_id = azurerm_user_assigned_identity.controller_id.id
+    type = "SystemAssigned"
+    #user_assigned_identity_id = azurerm_user_assigned_identity.controller_id.id
   }
 
   role_based_access_control {
@@ -53,7 +53,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   network_profile {
-    network_plugin     = "azure"
+    network_plugin     = "kubenet"
     network_policy     = "calico"
     dns_service_ip     = var.aks_configuration["dns_service_ip"]
     docker_bridge_cidr = var.aks_configuration["docker_bridge_cidr"]

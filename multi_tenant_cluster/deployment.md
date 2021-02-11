@@ -44,7 +44,7 @@ DEPLOYMENT_NAME="depl31" # name of the deployment lower case unique name
 ENV_CONFIG="dev" # environment config - alternative provide absolut or relative path to config file ./config/dev.tfvars
 LOCATION="northeurope" # datacenter location - default is northeurope
 SUBSCRIPTION_ID=$(az account show --query id -o tsv) # your subscription id
-./deploy.sh $DEPLOYMENT_NAME $ENV_CONFIG $LOCATION $SUBSCRIPTION_ID $AKS_SUBNET_ID
+./deploy.sh $DEPLOYMENT_NAME $ENV_CONFIG $LOCATION $SUBSCRIPTION_ID 
 
 ```
 
