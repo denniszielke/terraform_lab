@@ -32,18 +32,19 @@ AKS_SUBNET_ID=$(az network vnet subnet show -g $DEPLOYMENT_NAME-vnet --vnet-name
 If you already have a vnet please fill the following variables with the resource id for the application gateway and aks subnets
 
 ```
-GW_SUBNET_ID="/subscriptions/SUBSCRIPTIONID/resourceGroups/depl30-vnet/providers/Microsoft.Network/virtualNetworks/depl30/subnets/gwsubnet"
 AKS_SUBNET_ID="/subscriptions/SUBSCRIPTIONID/resourceGroups/depl30-vnet/providers/Microsoft.Network/virtualNetworks/depl30/subnets/akssubnet"
+
+GW_SUBNET_ID="/subscriptions/SUBSCRIPTIONID/resourceGroups/depl30-vnet/providers/Microsoft.Network/virtualNetworks/depl30/subnets/gwsubnet"
 
 ```
 
 ```
 chmod +x ./deploy.sh 
-DEPLOYMENT_NAME="depl30" # name of the deployment lower case unique name
+DEPLOYMENT_NAME="depl31" # name of the deployment lower case unique name
 ENV_CONFIG="dev" # environment config - alternative provide absolut or relative path to config file ./config/dev.tfvars
 LOCATION="northeurope" # datacenter location - default is northeurope
 SUBSCRIPTION_ID=$(az account show --query id -o tsv) # your subscription id
-./deploy.sh $DEPLOYMENT_NAME $ENV_CONFIG $LOCATION $SUBSCRIPTION_ID $GW_SUBNET_ID $AKS_SUBNET_ID
+./deploy.sh $DEPLOYMENT_NAME $ENV_CONFIG $LOCATION $SUBSCRIPTION_ID $AKS_SUBNET_ID
 
 ```
 

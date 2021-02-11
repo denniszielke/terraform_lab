@@ -8,15 +8,16 @@ export deploymentname="$1" # deployment name REQUIRED
 export env_config="$2" # environmetn config file
 export location="$3" # azure region OPTIONAL
 export subscriptionid="$4" # subscription id OPTIONAL
-export gwsubnetid="$5" # subnet id of the appgw subnet
-export akssubnetid="$6" # subnet id of the aks subnet
+export akssubnetid="$5" # subnet id of the aks subnet
+export gwsubnetid="$6" # subnet id of the appgw subnet
+
 
 echo "deploymentname: $deploymentname"
 echo "env_config: $env_config"
 echo "location: $location"
 echo "subscriptionid: $subscriptionid"
-echo "gwsubnetid: $gwsubnetid"
 echo "akssubnetid: $akssubnetid"
+echo "gwsubnetid: $gwsubnetid"
 
 if [ "$deploymentname" == "" ]; then
 echo "No deploymentname provided - aborting"
@@ -129,7 +130,9 @@ echo "Initialzing terraform state storage..."
 terraform init -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" ./environment
 
 echo "Planning terraform..."
-terraform plan -out $TERRAFORM_DEPLOYMENT_NAME-out.plan -var-file "config/$configname.tfvars" -var="tenant_id=$tenantid" -var="resource_group_name=$deploymentname" -var="deployment_name=$deploymentname" -var="location=$location" -var="subscription_id=$subscriptionid" -var="gw_subnet_id=$gwsubnetid" -var="aks_subnet_id=$akssubnetid" ./environment
+terraform plan -out $TERRAFORM_DEPLOYMENT_NAME-out.plan -var-file "config/$configname.tfvars" -var="tenant_id=$tenantid" -var="resource_group_name=$deploymentname" -var="deployment_name=$deploymentname" -var="location=$location" -var="subscription_id=$subscriptionid" -var="aks_subnet_id=$akssubnetid" ./environment
+
+# terraform plan -out $TERRAFORM_DEPLOYMENT_NAME-out.plan -var-file "config/$configname.tfvars" -var="tenant_id=$tenantid" -var="resource_group_name=$deploymentname" -var="deployment_name=$deploymentname" -var="location=$location" -var="subscription_id=$subscriptionid" -var="gw_subnet_id=$gwsubnetid" -var="aks_subnet_id=$akssubnetid" ./environment
 
 if [ -f $TERRAFORM_DEPLOYMENT_NAME-out.plan ]; then
    echo "Running terraform apply..."
