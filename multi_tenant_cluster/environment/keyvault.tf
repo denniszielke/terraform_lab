@@ -22,7 +22,7 @@ resource "azurerm_key_vault_access_policy" "deployment-user" {
   key_vault_id = azurerm_key_vault.infravault.id
 
   tenant_id = var.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
+  object_id = var.current_user_object_id
 
   key_permissions = [
     "get",

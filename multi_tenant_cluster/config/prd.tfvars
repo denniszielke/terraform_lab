@@ -6,3 +6,4 @@ aks_sku = "Paid"
 aks_admin_object_id = ""
 tags = {app = "demo1", env = "prd"}
 aks_subnet_id = ""
+current_user_object_id = ""
